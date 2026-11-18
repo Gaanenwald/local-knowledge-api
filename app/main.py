@@ -54,7 +54,6 @@ def file_extension_validate(file: UploadFile) -> str:
 
 async def get_file_content(file: UploadFile, extension: str) -> str:
     content = await file.read()
-
     return content_extractors[extension](content)
 
 
