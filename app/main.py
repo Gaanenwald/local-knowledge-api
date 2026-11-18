@@ -3,6 +3,7 @@ from fastapi import FastAPI, UploadFile
 from pymupdf import pymupdf
 
 from app.config import settings
+from models.document import Document
 
 app = FastAPI(title=settings.app_name)
 
@@ -62,12 +63,14 @@ async def health():
     return {"status": "ok"}
 
 
-@app.post("/documents")
+@app.post("/documents", response_model=Document)
 async def documents(file: UploadFile):
     file_extension = file_validate(file)
     content = await get_file_content(file, file_extension)
-    return {
-        "filename": file.filename,
-        "size": file.size,
-        "content": content
-    }
+
+    return Document(
+        filename=file.filename,
+        content=content,
+        extension=file_extension,
+        size=file.size
+    )
