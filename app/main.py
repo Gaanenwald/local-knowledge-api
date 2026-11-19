@@ -37,6 +37,9 @@ def file_validate(file: UploadFile):
     if not file.filename:
         raise fastapi.HTTPException(status_code=400, detail="No file name provided")
 
+    if file.size > settings.max_upload_size:
+        raise fastapi.HTTPException(status_code=413, detail="File too large")
+
     return file_extension_validate(file)
 
 
