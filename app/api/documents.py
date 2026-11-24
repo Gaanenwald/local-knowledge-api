@@ -1,10 +1,12 @@
-from fastapi import UploadFile
+from fastapi import UploadFile, APIRouter
 
-from main import app, file_validate, get_file_content
 from models.document import Document
+from services.document_extraction import file_validate, get_file_content
+
+router = APIRouter()
 
 
-@app.post("/documents", response_model=Document)
+@router.post("/documents", response_model=Document)
 async def documents(file: UploadFile):
     file_extension = file_validate(file)
     content = await get_file_content(file, file_extension)
