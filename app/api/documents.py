@@ -1,19 +1,13 @@
-from fastapi import UploadFile, APIRouter
+from fastapi import UploadFile, APIRouter, Depends
 
+from dependencies import get_file_processing_context
 from models.document import Document
-from services.document_extraction import file_validate, get_file_content
+from services.block_extraction import BlockExtractor
+from services.document_processing import process_document
 
 router = APIRouter()
 
 
 @router.post("/documents", response_model=Document)
-async def documents(file: UploadFile):
-    file_extension = file_validate(file)
-    content = await get_file_content(file, file_extension)
-
-    return Document(
-        filename=file.filename,
-        content=content,
-        extension=file_extension,
-        size=file.size
-    )
+async def documents(file: UploadFile, deps: tuple[str, BlockExtractor] = Depends(get_file_processing_context)):
+    return await process_document(file, *deps)

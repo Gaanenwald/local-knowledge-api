@@ -36,8 +36,6 @@ def file_validate(file: UploadFile):
     if file.size > settings.max_upload_size:
         raise HTTPException(status_code=413, detail="File too large")
 
-    return file_extension_validate(file)
-
 
 def file_extension_validate(file: UploadFile) -> str:
     rsplit_res = file.filename.rsplit('.', 1)
