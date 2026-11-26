@@ -17,3 +17,16 @@ class PdfBlockExtractor:
     def extract(self, content: str) -> list[dict]:
         # TODO: implement PDF structural extraction
         return []
+
+
+def get_block_extractor(file_extension: str) -> BlockExtractor:
+    extractor = block_extractors.get(file_extension)
+    if not extractor:
+        raise ValueError("Unsupported extension")
+    return extractor
+
+
+block_extractors = {
+    "md": MarkdownBlockExtractor(),
+    "pdf": PdfBlockExtractor(),
+}
