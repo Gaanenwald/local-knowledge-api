@@ -21,7 +21,7 @@ class PdfBlockExtractor:
 
 def get_block_extractor(file_extension: str) -> BlockExtractor:
     extractor = block_extractors.get(file_extension)
-    if not extractor:
+    if extractor is None:
         raise ValueError("Unsupported extension")
     return extractor
 
