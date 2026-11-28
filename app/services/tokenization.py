@@ -1,17 +1,8 @@
-# from typing import Protocol
-#
-# from transformers import AutoTokenizer
-#
-# from config import settings
-#
-#
-# class Tokenizer(Protocol):
-#     def count_tokens(self, text: str) -> int:
-#         ...
-#
-#     def encode_with_offsets(self, text: str) -> tuple[list[int], list[tuple[int, int]]]:
-#         ...
-#
-#
-# def tokenizer_init():
-#     ...
+from config import Settings
+from registries import TOKENIZER_MODELS, TOKENIZER_BACKENDS
+
+
+def tokenizer_init(settings: Settings):
+    tokenizer_model = TOKENIZER_MODELS[settings.embedding_model]
+    tokenizer_backend = TOKENIZER_BACKENDS[settings.tokenizer_backend]
+    return tokenizer_backend(model_name=tokenizer_model)
